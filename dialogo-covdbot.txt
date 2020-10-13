@@ -1,0 +1,152 @@
+/*
+
+dialogo covidbot
+
+
+else if globalContatos[numero].caminho == 1 {
+	// setando idade
+	globalContatos[numero].idade = message.Text
+	// informe o sexo
+	sendMsg(numero, sexo)
+	globalContatos[numero].caminho = 2
+} else if globalContatos[numero].caminho == 2 {
+	// setando sexo
+	globalContatos[numero].sexo = message.Text
+	if globalContatos[numero].sexo == "F" || globalContatos[numero].sexo == "f" {
+		// ta gravida
+		sendMsg(numero, QR007)
+		globalContatos[numero].caminho = 21
+	} else if globalContatos[numero].sexo == "M" || globalContatos[numero].sexo == "m" {
+		// informe o cep
+		sendMsg(numero, QRCEP)
+		globalContatos[numero].caminho = 3
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, sexo)
+	}
+} else if globalContatos[numero].caminho == 21 {
+	if message.Text == "1" || message.Text == "2" {
+		// setando gravida
+		globalContatos[numero].gravida = message.Text
+		// informe o cep
+		sendMsg(numero, QRCEP)
+		globalContatos[numero].caminho = 3
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QR007)
+	}
+} else if globalContatos[numero].caminho == 3 {
+	// setando cep
+	globalContatos[numero].cep = message.Text
+	// informe febre -> 1 - Sim | 2 - Não
+	sendMsg(numero, QS000)
+	globalContatos[numero].caminho = 4
+} else if globalContatos[numero].caminho == 4 {
+	if message.Text == "1" {
+		sendMsg(numero, QS001) // Agora fale um pouco mais sobre a sua febre. Faz tempo que você está com febre?\n*1* - Dois dias ou menos.\n*2* - Mais de 2 dias.
+		globalContatos[numero].febre = "1"
+		globalContatos[numero].caminho = 5
+	} else if message.Text == "2" {
+		sendMsg(numero, QR002) // Teve contato com alguém que foi infectado pelo Covid-19?\n*1* - Sim\n*2* - Não
+		globalContatos[numero].febre = "2"
+		globalContatos[numero].caminho = 9
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QS000)
+	}
+} else if globalContatos[numero].caminho == 5 {
+	if message.Text == "1" || message.Text == "2" {
+		// informe a temperatura
+		sendMsg(numero, QS002)
+		// setando febre
+		globalContatos[numero].tempoFebre = message.Text
+		globalContatos[numero].caminho = 6
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QS001)
+	}
+} else if globalContatos[numero].caminho == 6 {
+	if message.Text == "1" || message.Text == "2" || message.Text == "3" || message.Text == "4" || message.Text == " " {
+		// tomou medicamentos
+		sendMsg(numero, QN001)
+		//setando temperatura
+		globalContatos[numero].temperatura = message.Text
+		globalContatos[numero].caminho = 7
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QS002)
+	}
+} else if globalContatos[numero].caminho == 7 {
+	if message.Text == "1" {
+		// teve melhora
+		sendMsg(numero, QR003)
+		// setando remedio
+		globalContatos[numero].remedio = message.Text
+		globalContatos[numero].caminho = 8
+	} else if message.Text == "2" {
+		// teve contato?
+		sendMsg(numero, QR002)
+		// setando remedio
+		globalContatos[numero].remedio = message.Text
+		globalContatos[numero].caminho = 9
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QN001)
+	}
+} else if globalContatos[numero].caminho == 8 {
+	if message.Text == "1" || message.Text == "2" {
+		// teve contato?
+		sendMsg(numero, QR002)
+		// setando melhora
+		globalContatos[numero].melhora = message.Text
+		globalContatos[numero].caminho = 9
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QR003)
+	}
+} else if globalContatos[numero].caminho == 9 {
+	if message.Text == "1" || message.Text == "2" {
+		// teve sintomasI
+		sendMsg(numero, QR001)
+		// setando contato
+		globalContatos[numero].infect = message.Text
+		globalContatos[numero].caminho = 10
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QR002)
+	}
+} else if globalContatos[numero].caminho == 10 {
+	if message.Text == "1" || message.Text == "2" || message.Text == "3" || message.Text == "4" || message.Text == "5" || message.Text == "6" || message.Text != " " {
+		// teve sintomasII
+		sendMsg(numero, QR005)
+		// setando sintomasI
+		globalContatos[numero].sintomasI = message.Text
+		globalContatos[numero].caminho = 11
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QR001)
+	}
+} else if globalContatos[numero].caminho == 11 {
+	if message.Text == "1" || message.Text == "2" || message.Text == "3" || message.Text == "4" || message.Text == "5" || message.Text == "6" || message.Text != " " {
+		//  locais de casos confirmados
+		sendMsg(numero, QR004)
+		//setando sintomasII
+		globalContatos[numero].sintomasII = message.Text
+		globalContatos[numero].caminho = 12
+	} else {
+		sendMsg(numero, retor)
+		sendMsg(numero, QR005)
+	}
+} else if globalContatos[numero].caminho == 12 {
+	if message.Text == "1" || message.Text == "2" {
+		// setando locais
+		globalContatos[numero].viagem = message.Text
+		sendMsg(numero, "Olá, chegamos ao fim, estamos processando as suas informações.\n*Aguarde alguns instantes.*")
+		sendDataClouding(globalContatos[numero])
+		sendMsg(numero, "\n\nBom, espero que possamos falar mais vezes. Tente fazer esse teste todos os dias.")
+	} else {
+		sendMsg(numero, retor) //  Desculpe, nao entendi sua resposta. Digite uma das opcoes abaixo para prosseguir.
+		sendMsg(numero, QR004)
+	}
+}*/
+
